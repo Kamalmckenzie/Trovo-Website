@@ -192,8 +192,8 @@ $$(".reveal, [data-truck]:not(.closed-truck)").forEach(el => io.observe(el));
     reset();
     if (!motionOn) { truck.classList.add("arrived"); return; }
     timers.push(setTimeout(() => truck.classList.add("arrived"), 60));
-    timers.push(setTimeout(() => truck.classList.add("leaving"), 2900));
-    timers.push(setTimeout(() => { stage.classList.add("gone"); cloud.innerHTML = "“…and there it goes. 😩”"; }, 3900));
+    timers.push(setTimeout(() => truck.classList.add("leaving"), 1700));
+    timers.push(setTimeout(() => { stage.classList.add("gone"); cloud.innerHTML = "“…and there it goes. 😩”"; }, 2500));
   };
   new IntersectionObserver(en => {
     en.forEach(e => {

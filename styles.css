@@ -679,7 +679,7 @@ body.still .food-float { display: none; }
 /* ---------- closed truck drives off ---------- */
 .leave-stage { overflow: hidden; overflow: clip; overflow-clip-margin: 40px; }
 .closed-truck .body-group { transition: transform 1.4s var(--ease); }
-.closed-truck.leaving .body-group { transform: translateX(900px); transition: transform 1.9s cubic-bezier(.55, 0, .9, .4); }
+.closed-truck.leaving .body-group { transform: translateX(900px); transition: transform .9s cubic-bezier(.6, 0, .9, .45); }
 .closed-truck.leaving .wheel { animation: spin .22s linear infinite; }
 .closed-truck.leaving svg { animation: rumble .1s ease-in-out infinite alternate; }
 .closed-truck .exhaust circle { fill: #9BA6BB; opacity: 0; transform-box: fill-box; transform-origin: center; }
