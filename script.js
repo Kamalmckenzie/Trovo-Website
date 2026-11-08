@@ -127,6 +127,7 @@ function truckSVG({ body = "#E6592A", cab = "#C34A20", sign = "TROVO", signColor
       <g class="awning">${stripes}</g>
       <text x="300" y="218" fill="rgba(255,255,255,.75)" font-size="13" font-weight="800" text-anchor="end" font-family="Outfit, sans-serif">Live on Trovo</text>
       ${wheel(100)}${wheel(362)}
+      ${closed ? '<g class="exhaust"><circle cx="14" cy="212" r="10"/><circle cx="6" cy="206" r="14"/><circle cx="-4" cy="200" r="18"/></g>' : ''}
     </g>
     <defs><radialGradient id="glow" cx="50%" cy="30%" r="70%"><stop offset="0" stop-color="#FBBF24" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
   </svg>`;
@@ -173,7 +174,34 @@ const io = new IntersectionObserver(entries => {
     io.unobserve(el);
   });
 }, { threshold: 0, rootMargin: "0px 0px -10% 0px" });
-$$(".reveal, [data-truck]").forEach(el => io.observe(el));
+$$(".reveal, [data-truck]:not(.closed-truck)").forEach(el => io.observe(el));
+
+/* closed truck: rolls in, sits closed, then drives off. Replays each visit. */
+(function closedTruckDriveOff() {
+  const truck = $(".closed-truck"), stage = truck.closest(".truck-stage"), cloud = $("#closedCloud");
+  const cloudText = cloud.innerHTML;
+  let timers = [];
+  const clear = () => { timers.forEach(clearTimeout); timers = []; };
+  const reset = () => {
+    clear();
+    truck.classList.remove("arrived", "leaving");
+    stage.classList.remove("gone");
+    cloud.innerHTML = cloudText;
+  };
+  const play = () => {
+    reset();
+    if (!motionOn) { truck.classList.add("arrived"); return; }
+    timers.push(setTimeout(() => truck.classList.add("arrived"), 60));
+    timers.push(setTimeout(() => truck.classList.add("leaving"), 2900));
+    timers.push(setTimeout(() => { stage.classList.add("gone"); cloud.innerHTML = "“…and there it goes. 😩”"; }, 3900));
+  };
+  new IntersectionObserver(en => {
+    en.forEach(e => {
+      if (e.isIntersecting) play();
+      else if (e.intersectionRatio === 0) reset();
+    });
+  }, { threshold: [0, 0.45] }).observe(stage);
+})();
 $$(".pricing, .icon-row").forEach(g => $$(".reveal, li", g).forEach((el, i) => (el.style.transitionDelay = `${i * 70}ms`)));
 
 /* =========================================================
