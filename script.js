@@ -386,3 +386,193 @@ $("#shareBtn").addEventListener("click", async () => {
   toast(ok ? "📋 Invite link copied. Send it to a hungry friend." : "Couldn't copy here. Grab the link from your address bar.");
 });
 $("#resetBtn").addEventListener("click", () => { form.reset(); setRole("foodie"); form.hidden = false; badgeWrap.hidden = true; });
+
+/* =========================================================
+   MOTION PACK
+   ========================================================= */
+const bigMotion = !reduceMotion;
+
+/* 1. Headlines rise in word by word */
+$$("h1.reveal, h2.reveal").forEach(h => {
+  let i = 0;
+  const walk = node => {
+    [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+          const w = document.createElement("span"); w.className = "w";
+          const inner = document.createElement("span"); inner.textContent = part; inner.style.setProperty("--i", i++);
+          w.appendChild(inner); frag.appendChild(w);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && n.tagName !== "BR") walk(n);
+    });
+  };
+  walk(h);
+});
+
+/* 2. Trucks driving along the hero road */
+(function roadTrucks() {
+  const g = $("#roadTrucks"); if (!g) return;
+  const colors = [["#E6592A", "#C34A20"], ["#00695C", "#004d43"], ["#FBBF24", "#d99a0b"], ["#9BA6BB", "#6B7386"]];
+  g.innerHTML = colors.map(([b, c], i) => `
+    <g><g transform="translate(0,-4)">
+      <rect x="-30" y="-30" width="40" height="22" rx="4" fill="${b}"/>
+      <rect x="-25" y="-25" width="22" height="9" rx="2" fill="#0b0d12"/>
+      <rect x="8" y="-22" width="20" height="14" rx="3" fill="${c}"/>
+      <rect x="13" y="-19" width="10" height="6" rx="1.5" fill="#cbd5e1"/>
+      <circle cx="27" cy="-12" r="2" fill="#fde68a"/>
+      <circle cx="-20" cy="-6" r="5.5" fill="#111" stroke="#fff" stroke-width="2"/>
+      <circle cx="17" cy="-6" r="5.5" fill="#111" stroke="#fff" stroke-width="2"/></g>
+      <animateMotion dur="${15 + i * 2}s" begin="${-i * 4.3}s" repeatCount="indefinite" rotate="auto"><mpath href="#roadPath"/></animateMotion>
+    </g>`).join("");
+})();
+
+/* 3. Food floating up through the hero */
+(function foodFloat() {
+  const box = $("#foodFloat"); if (!box) return;
+  const foods = ["🌮", "🍔", "🍗", "🍖", "🍑", "🍋", "🥤", "🍳", "🌯", "🍟", "🧁", "🥪"];
+  const spawn = () => {
+    if (document.hidden || box.childElementCount > 14 || scrollY > innerHeight) return;
+    const s = document.createElement("span");
+    s.textContent = foods[Math.floor(Math.random() * foods.length)];
+    s.style.left = Math.random() * 100 + "%";
+    s.style.setProperty("--s", 20 + Math.random() * 26 + "px");
+    s.style.setProperty("--d", 8 + Math.random() * 6 + "s");
+    s.style.setProperty("--x", (Math.random() * 120 - 60) + "px");
+    s.style.setProperty("--r", (Math.random() * 120 - 60) + "deg");
+    box.appendChild(s);
+    s.addEventListener("animationend", () => s.remove());
+  };
+  for (let k = 0; k < 6; k++) setTimeout(spawn, k * 350);
+  setInterval(spawn, 900);
+})();
+
+/* 4. Hero phone cycles through live trucks */
+(function phoneCycle() {
+  const cardEl = $(".ps-card"), pins = $$(".ps-map .pin"); if (!cardEl) return;
+  const live = TRUCKS.filter(t => t.live);
+  let k = 0;
+  const show = () => {
+    const t = live[k % live.length];
+    cardEl.classList.add("swap");
+    setTimeout(() => {
+      $(".ps-thumb", cardEl).textContent = t.emoji;
+      $(".ps-thumb", cardEl).style.background = `linear-gradient(135deg, ${t.color}, #161A23)`;
+      $(".ps-row strong", cardEl).textContent = t.name;
+      $(".rating", cardEl).textContent = "★ " + t.rating;
+      $(".ps-sub", cardEl).textContent = t.cat;
+      $(".ps-meta", cardEl).innerHTML = `<span class="live">● LIVE</span><span>📍 ${t.dist}</span><span>⏱ ${t.wait}</span>`;
+      pins.forEach((p, i) => p.classList.toggle("hot", i === k % pins.length));
+      cardEl.classList.remove("swap");
+      k++;
+    }, 350);
+  };
+  show(); setInterval(show, 3200);
+})();
+
+/* 5. Scroll-linked "NEXT STOP" banners between sections */
+const nextNames = ["The Closed Window", "Meet Trovo", "The Plan", "For Truck Owners", "The Founders' Window", "Dessert"];
+const banners = [];
+$$(".stop").slice(1).forEach((s, i) => {
+  const b = document.createElement("div");
+  b.className = "next-stop"; b.setAttribute("aria-hidden", "true");
+  const unit = `<span>Next stop</span><span class="on">→ ${nextNames[i]}</span><span>✦</span>`;
+  b.innerHTML = `<div class="ns-track">${unit.repeat(6)}</div>`;
+  s.before(b);
+  banners.push({ el: b, track: b.firstElementChild, dir: i % 2 ? 1 : -1 });
+});
+
+/* 6. Parallax + banner scrub on scroll (one rAF loop) */
+const parallax = [
+  ...$$(".blob").map(el => ({ el, speed: 0.25 })),
+  ...$$(".float-badge").map(el => ({ el, speed: -0.12 })),
+  ...$$(".sad-cloud").map(el => ({ el, speed: -0.1 })),
+  ...$$(".truck").map(el => ({ el, speed: 0.06 })),
+  ...$$(".story-card").map(el => ({ el, speed: -0.05 }))
+];
+let ticking = false;
+function motionFrame() {
+  ticking = false;
+  const vh = innerHeight;
+  banners.forEach(({ el, track, dir }) => {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < -50 || r.top > vh + 50) return;
+    const p = (vh - r.top) / (vh + r.height);
+    track.style.transform = `translateX(${dir * (p * 40 + (dir > 0 ? -45 : 5))}%)`;
+  });
+  if (!bigMotion) return;
+  parallax.forEach(({ el, speed }) => {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < -200 || r.top > vh + 200) return;
+    const off = (r.top + r.height / 2 - vh / 2) * speed;
+    el.style.translate = `0 ${off.toFixed(1)}px`;
+  });
+}
+addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(motionFrame); } }, { passive: true });
+motionFrame();
+
+/* 7. Demo map: traffic, radar sweep, trucks going live */
+(function mapLife() {
+  const radar = document.createElement("div"); radar.className = "radar"; mapEl.prepend(radar);
+  const roads = [
+    { top: "22%", d: 9 }, { top: "41%", d: 12, rev: true }, { top: "88%", d: 10 },
+    { top: "22%", d: 14, delay: -6 }, { top: "41%", d: 8, rev: true, delay: -3 }
+  ];
+  roads.forEach(r => {
+    const c = document.createElement("i");
+    c.className = "car" + (r.rev ? " rev" : "");
+    c.style.top = r.top; c.style.setProperty("--d", r.d + "s"); c.style.setProperty("--delay", (r.delay || 0) + "s");
+    mapEl.appendChild(c);
+  });
+  [["14%", 11], ["40%", 9], ["64%", 13], ["88%", 10]].forEach(([left, d], i) => {
+    const c = document.createElement("i");
+    c.className = "car v"; c.style.left = left; c.style.setProperty("--d", d + "s"); c.style.setProperty("--delay", -i * 2.5 + "s");
+    mapEl.appendChild(c);
+  });
+
+  const bubble = (t, text) => {
+    const b = document.createElement("div");
+    b.className = "map-bubble"; b.textContent = text;
+    b.style.left = t.x + "%"; b.style.top = t.y + "%";
+    mapEl.appendChild(b); setTimeout(() => b.remove(), 3300);
+  };
+  const lemon = TRUCKS.find(t => t.id === "lemon");
+  let tick = 0;
+  setInterval(() => {
+    if (document.hidden) return;
+    const r = mapEl.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    tick++;
+    if (tick % 3 === 0) {
+      lemon.live = !lemon.live;
+      lemon.until = lemon.live ? "5:00 PM" : "Back Sat 11 AM";
+      lemon.wait = lemon.live ? "5 min" : "—";
+      const pin = $(`.map-pin[data-id="lemon"]`, mapEl);
+      pin.classList.toggle("offline", !lemon.live);
+      if (lemon.live) { pin.classList.remove("just-live"); void pin.offsetWidth; pin.classList.add("just-live"); }
+      bubble(lemon, lemon.live ? "🎉 Just went live!" : "👋 Shift ended");
+      renderDemo();
+    } else {
+      const live = TRUCKS.filter(t => t.live);
+      const t = live[Math.floor(Math.random() * live.length)];
+      const msgs = ["🔥 Line's moving fast", "🧭 Someone's heading over", "⭐ New 5-star review", "🍽️ Menu updated"];
+      bubble(t, msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+  }, 2800);
+})();
+
+/* 8. 3D tilt on cards */
+if (bigMotion && matchMedia("(hover: hover)").matches) {
+  $$(".auth-card, .fw, .price-card, .problem-trio > div, .plan li").forEach(card => {
+    card.classList.add("tiltable");
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(800px) rotateX(${-y * 8}deg) rotateY(${x * 10}deg) translateY(-4px)`;
+    });
+    card.addEventListener("pointerleave", () => (card.style.transform = ""));
+  });
+}

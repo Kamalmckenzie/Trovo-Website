@@ -483,8 +483,101 @@ input:focus, select:focus { border-color: var(--orange); }
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* Reduced motion: keep gentle ambient loops, drop big movement (parallax, drive-ins, word rises) */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; }
+  .reveal { transition-duration: .4s; transform: none; }
+  .truck .body-group { transform: none; }
+  .w > span { transform: none !important; }
 }
+
+/* =========================================================
+   MOTION PACK
+   ========================================================= */
+/* word-by-word headline rise */
+.w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; margin-bottom: -.08em; }
+.w > span { display: inline-block; transform: translateY(105%) rotate(4deg); transition: transform .9s var(--ease); transition-delay: calc(var(--i) * 55ms + 120ms); }
+.reveal.in .w > span, .in .w > span { transform: none; }
+h1.reveal, h2.reveal { opacity: 1; transform: none; }
+
+/* floating food in hero */
+.food-float { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.food-float span { position: absolute; bottom: -60px; font-size: var(--s, 28px); opacity: 0; animation: rise var(--d, 9s) linear forwards; filter: drop-shadow(0 8px 12px rgba(0,0,0,.5)); }
+@keyframes rise {
+  0% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  10% { opacity: .85; }
+  50% { transform: translate(var(--x, 30px), -55vh) rotate(var(--r, 40deg)); }
+  90% { opacity: .7; }
+  100% { transform: translate(calc(var(--x, 30px) * -.5), -110vh) rotate(calc(var(--r, 40deg) * 2)); opacity: 0; }
+}
+
+/* hero phone card cycling */
+.ps-card { transition: opacity .35s, transform .35s var(--ease); }
+.ps-card.swap { opacity: 0; transform: translateY(10px) scale(.97); }
+.pin { transition: transform .4s var(--spring); }
+.pin.hot { animation: none; transform: rotate(-45deg) scale(1.45); z-index: 2; background: var(--gold); }
+.route-line { stroke-dasharray: 6 6; animation: dash 1s linear infinite; }
+.phone { animation: phoneFloat 6s ease-in-out infinite; }
+@keyframes phoneFloat { 50% { translate: 0 -14px; } }
+
+/* idle engine rumble + headlight blink on arrived trucks */
+.truck.arrived svg { animation: rumble .16s ease-in-out infinite alternate; }
+.closed-truck.arrived svg { animation: none; }
+@keyframes rumble { from { translate: 0 0; } to { translate: 0 1.4px; } }
+.truck .awning { transition: transform 1s var(--spring); }
+.truck.open .awning { animation: flap 3.5s 2s ease-in-out infinite; }
+@keyframes flap { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(.9) skewX(-3deg); } }
+.sad-cloud { animation: floaty 4s ease-in-out infinite; }
+.closed-truck svg .sign-light { animation: buzz 2.2s steps(1) infinite; }
+@keyframes buzz { 0%, 70%, 80%, 100% { opacity: 1; } 72%, 78% { opacity: .25; } }
+
+/* scroll-linked "next stop" banners */
+.next-stop { position: relative; z-index: 1; overflow: hidden; padding: 18px 0; border-top: 1px solid rgba(58,65,82,.35); background: #050608; }
+.ns-track { display: flex; gap: 40px; width: max-content; font-weight: 900; font-size: clamp(2rem, 5vw, 4.2rem); letter-spacing: -.03em; text-transform: uppercase; white-space: nowrap; will-change: transform; }
+.ns-track span { color: transparent; -webkit-text-stroke: 1.5px var(--border); }
+.ns-track span.on { color: var(--orange); -webkit-text-stroke: 0; }
+
+/* demo map traffic + live events */
+.car { position: absolute; width: 10px; height: 5px; border-radius: 3px; background: #fde68a; box-shadow: 0 0 10px 2px rgba(253,230,138,.55); z-index: 1; animation: drive var(--d, 9s) linear infinite; animation-delay: var(--delay, 0s); }
+.car.rev { background: #f87171; box-shadow: 0 0 10px 2px rgba(248,113,113,.5); animation-name: driveRev; }
+.car.v { width: 5px; height: 10px; animation-name: driveV; }
+@keyframes drive { from { left: -3%; } to { left: 103%; } }
+@keyframes driveRev { from { left: 103%; } to { left: -3%; } }
+@keyframes driveV { from { top: -3%; } to { top: 103%; } }
+.map-pin.just-live .mp-head { animation: popLive .8s var(--spring); }
+@keyframes popLive { 0% { transform: scale(.2) translateY(-40px); } 100% { transform: none; } }
+.map-bubble { position: absolute; z-index: 4; transform: translate(-50%, calc(-100% - 64px)); background: var(--white); color: #000; font-size: .78rem; font-weight: 700; padding: 6px 10px; border-radius: 10px; white-space: nowrap; animation: bubble 3.2s var(--ease) forwards; pointer-events: none; }
+.map-bubble::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: #fff; transform: translateX(-50%) rotate(45deg); }
+@keyframes bubble { 0% { opacity: 0; translate: 0 10px; } 12%, 80% { opacity: 1; translate: 0 0; } 100% { opacity: 0; translate: 0 -8px; } }
+.radar { position: absolute; left: 44%; top: 46%; width: 600px; height: 600px; margin: -300px 0 0 -300px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(230,89,42,.22), transparent 18%); animation: sweep 5s linear infinite; pointer-events: none; }
+@keyframes sweep { to { transform: rotate(360deg); } }
+
+/* animated gradient border on featured price card */
+@property --ang { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.price-card.featured { border: 2px solid transparent; background: linear-gradient(180deg, #2a1a14, var(--navy) 55%) padding-box, conic-gradient(from var(--ang), var(--orange), var(--gold), var(--teal), var(--orange)) border-box; animation: spinBorder 4s linear infinite; }
+@keyframes spinBorder { to { --ang: 360deg; } }
+.ribbon { animation: wiggle 3s ease-in-out infinite; }
+@keyframes wiggle { 0%, 85%, 100% { rotate: 0deg; } 90% { rotate: -6deg; } 95% { rotate: 5deg; } }
+
+/* tilt cards */
+.tiltable { transform-style: preserve-3d; will-change: transform; }
+
+/* plan: progress line + pulsing numbers */
+.plan { position: relative; }
+.plan-n { animation: numPulse 3s ease-in-out infinite; }
+.plan li:nth-child(2) .plan-n { animation-delay: 1s; }
+.plan li:nth-child(3) .plan-n { animation-delay: 2s; }
+@keyframes numPulse { 0%, 30%, 100% { box-shadow: 0 0 0 0 rgba(230,89,42,.6); transform: none; } 15% { box-shadow: 0 0 0 10px rgba(230,89,42,0); transform: scale(1.12) rotate(-6deg); } }
+
+/* go-live button breathing */
+.golive-btn[aria-pressed="false"] { animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 50% { box-shadow: 0 16px 0 var(--orange-dark), 0 30px 70px 0 rgba(230,89,42,.75); } }
+
+/* glow pulse on highlighted words */
+.hl { animation: hlGlow 3.5s ease-in-out infinite; }
+@keyframes hlGlow { 0%, 100% { color: var(--orange); } 50% { color: #ff8a55; } }
+
+/* success emojis bounce */
+.success li span { animation: bounce 2.4s ease-in-out infinite; }
+.success li:nth-child(2) span { animation-delay: .4s; } .success li:nth-child(3) span { animation-delay: .8s; }
+@keyframes bounce { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(-8px) rotate(-8deg); } }
