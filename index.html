@@ -4,53 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trovo — Find food trucks that are actually open</title>
-  <meta name="description" content="Trovo shows which food trucks are serving right now near Warner Robins and Macon, GA — live locations, menus, and one-tap directions. Truck owners go live in one tap." />
+  <meta name="description" content="Trovo shows which food trucks are serving right now near Warner Robins and Macon, GA. Truck owners go live in one tap." />
   <meta name="theme-color" content="#000000" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-audience="foodie">
+  <a class="skip" href="#join">Skip to sign-up</a>
   <div class="cursor-glow" aria-hidden="true"></div>
 
   <!-- ============ TOP NAV ============ -->
   <header class="nav">
-    <a href="#stop-1" class="logo" aria-label="Trovo home">Trov<span class="logo-o">o</span></a>
+    <a href="#start" class="logo" aria-label="Trovo home">Trov<span class="logo-o">o</span></a>
     <nav class="nav-links" aria-label="Main">
-      <a href="#stop-3">For foodies</a>
-      <a href="#stop-5">For trucks</a>
-      <a href="#stop-6">Pricing</a>
+      <button type="button" class="nav-aud" data-set-aud="foodie">For foodies</button>
+      <button type="button" class="nav-aud" data-set-aud="truck">For trucks</button>
     </nav>
-    <a href="#stop-7" class="btn btn-primary btn-sm magnetic">Get early access</a>
+    <div class="nav-tools">
+      <button type="button" class="tool-btn" id="textSizeBtn" aria-pressed="false" title="Make text bigger"><span aria-hidden="true">Aa</span><span class="tool-label">Bigger text</span></button>
+      <button type="button" class="tool-btn" id="motionBtn" aria-pressed="false" title="Pause animations"><span aria-hidden="true" class="motion-ic">❚❚</span><span class="tool-label">Pause motion</span></button>
+    </div>
   </header>
 
-  <!-- ============ ROUTE BAR (scroll progress = a truck driving the crawl) ============ -->
+  <!-- ============ ROUTE BAR: scroll progress + always-on join button ============ -->
   <nav class="route" aria-label="Food truck crawl stops">
-    <div class="route-track">
-      <div class="route-fill"></div>
-      <div class="route-truck" aria-hidden="true">
-        <svg viewBox="0 0 48 30"><rect x="1" y="4" width="32" height="18" rx="4" fill="#E6592A"/><rect x="31" y="10" width="15" height="12" rx="3" fill="#E6592A"/><rect x="35" y="12" width="8" height="5" rx="1.5" fill="#9BA6BB"/><rect x="5" y="8" width="20" height="8" rx="2" fill="#161A23"/><circle cx="11" cy="24" r="4.5" fill="#000" stroke="#fff" stroke-width="2"/><circle cx="37" cy="24" r="4.5" fill="#000" stroke="#fff" stroke-width="2"/></svg>
+    <div class="route-main">
+      <div class="route-track">
+        <div class="route-fill"></div>
+        <div class="route-truck" aria-hidden="true">
+          <svg viewBox="0 0 48 30"><rect x="1" y="4" width="32" height="18" rx="4" fill="#E6592A"/><rect x="31" y="10" width="15" height="12" rx="3" fill="#E6592A"/><rect x="35" y="12" width="8" height="5" rx="1.5" fill="#9BA6BB"/><rect x="5" y="8" width="20" height="8" rx="2" fill="#161A23"/><circle cx="11" cy="24" r="4.5" fill="#000" stroke="#fff" stroke-width="2"/><circle cx="37" cy="24" r="4.5" fill="#000" stroke="#fff" stroke-width="2"/></svg>
+        </div>
       </div>
+      <ol class="route-stops" id="routeStops"></ol>
     </div>
-    <ol class="route-stops">
-      <li><a href="#stop-1" data-label="The Lot"><span>1</span></a></li>
-      <li><a href="#stop-2" data-label="Closed Window"><span>2</span></a></li>
-      <li><a href="#stop-3" data-label="Meet Trovo"><span>3</span></a></li>
-      <li><a href="#stop-4" data-label="The Plan"><span>4</span></a></li>
-      <li><a href="#stop-5" data-label="For Trucks"><span>5</span></a></li>
-      <li><a href="#stop-6" data-label="Founders"><span>6</span></a></li>
-      <li><a href="#stop-7" data-label="Dessert"><span>7</span></a></li>
-    </ol>
+    <a href="#join" class="btn btn-primary btn-sm route-cta">Join</a>
   </nav>
 
   <main>
     <!-- =========================================================
-         STOP 1 · THE LOT (Hero)
-         StoryBrand: the Character + what they want, in one line.
-         Contagious: Trigger (live clock → "lunchtime = Trovo").
+         HERO · passes the 5-second test: what / why / what to do.
+         One switch splits the whole site by audience.
          ========================================================= -->
-    <section class="stop hero" id="stop-1" data-stop="1">
+    <section class="stop hero" id="start" data-label="The Lot">
       <div class="hero-bg" aria-hidden="true">
         <div class="blob blob-1"></div><div class="blob blob-2"></div>
         <svg class="hero-road" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice"><path id="roadPath" d="M-20 320 C 300 220, 520 380, 760 280 S 1200 160, 1460 240" fill="none" stroke="#1E2330" stroke-width="46" stroke-linecap="round"/><path d="M-20 320 C 300 220, 520 380, 760 280 S 1200 160, 1460 240" fill="none" stroke="#3A4152" stroke-width="3" stroke-dasharray="22 22" class="road-dash"/><g id="roadTrucks"></g></svg>
@@ -59,18 +56,22 @@
 
       <div class="hero-inner">
         <div class="hero-copy">
-          <p class="ticket reveal"><span class="live-dot"></span> <span id="clock">It's lunchtime somewhere.</span> Who's serving right now?</p>
-          <h1 class="reveal">Find food trucks that are <span class="hl">actually open.</span></h1>
-          <p class="lede reveal">See who's serving right now near Warner Robins &amp; Macon, peek at the menu, and get directions in one tap. No more digging through five Instagram accounts to find lunch.</p>
-          <div class="cta-row reveal">
-            <a href="#stop-7" class="btn btn-primary magnetic">Get early access</a>
-            <a href="#stop-5" class="btn btn-ghost magnetic">I own a food truck →</a>
+          <p class="ticket reveal"><span class="live-dot"></span> <span id="clock">Who's serving right now?</span></p>
+          <h1 class="reveal" data-for="foodie">Find food trucks that are <span class="hl">actually open.</span></h1>
+          <h1 class="reveal" data-for="truck">Get your truck <span class="hl">found.</span></h1>
+          <p class="lede reveal" data-for="foodie">See who's serving near you right now.</p>
+          <p class="lede reveal" data-for="truck">One tap puts you on the map for hungry people nearby. No more posting in five places.</p>
+
+          <div class="aud-switch reveal" role="radiogroup" aria-label="I am">
+            <button type="button" role="radio" data-set-aud="foodie">🍽️ I'm hungry</button>
+            <button type="button" role="radio" data-set-aud="truck">🚚 I own a truck</button>
+            <span class="aud-pill" aria-hidden="true"></span>
           </div>
-          <ul class="hero-proof reveal">
-            <li><span class="ic">✓</span> Free for foodies</li>
-            <li><span class="ic">✓</span> Locations confirmed by the truck itself</li>
-            <li><span class="ic">✓</span> Built in Middle Georgia</li>
-          </ul>
+
+          <div class="cta-row reveal">
+            <a href="#join" class="btn btn-primary btn-lg magnetic" data-for="foodie">Get early access</a>
+            <a href="#join" class="btn btn-primary btn-lg magnetic" data-for="truck">Claim a founding spot</a>
+          </div>
         </div>
 
         <div class="hero-phone-wrap reveal">
@@ -98,7 +99,7 @@
                 <div class="ps-thumb" aria-hidden="true">🍳</div>
                 <div class="ps-info">
                   <div class="ps-row"><strong>Golden Hour Biscuits</strong><span class="rating">★ 5.0</span></div>
-                  <div class="ps-sub">Catering · Southern</div>
+                  <div class="ps-sub">Southern</div>
                   <div class="ps-meta"><span class="live">● LIVE</span><span>📍 0.4 mi</span><span>⏱ 10–15 min</span></div>
                 </div>
               </div>
@@ -116,83 +117,61 @@
           <span>Biscuits</span><span>•</span><span>Birria tacos</span><span>•</span><span>Brisket</span><span>•</span><span>Lemon pepper wings</span><span>•</span><span>Peach cobbler</span><span>•</span><span>Smash burgers</span><span>•</span><span>Fresh lemonade</span><span>•</span><span>Shrimp &amp; grits</span><span>•</span>
         </div>
       </div>
-      <a href="#stop-2" class="scroll-hint">Start the crawl <span>↓</span></a>
     </section>
 
-    <!-- =========================================================
-         STOP 2 · THE CLOSED WINDOW (Problem + Stakes)
-         StoryBrand: villain (stale info), external / internal /
-         philosophical problem, and what failure costs.
-         Contagious: Emotion (that sinking "it's closed" feeling).
-         ========================================================= -->
-    <section class="stop" id="stop-2" data-stop="2">
+    <!-- ===================== FOODIE · the problem ===================== -->
+    <section class="stop" id="closed" data-for="foodie" data-label="Closed Window">
       <div class="stop-grid">
         <div class="truck-stage">
-          <div class="truck closed-truck" data-truck data-body="#3A4152" data-cab="#2b3140" data-sign="SORRY · CLOSED" data-signcolor="#6B7386" data-stay-closed="true"></div>
-          <div class="sad-cloud reveal">“It said <em>open</em> on their post…”</div>
+          <div class="truck closed-truck" data-truck data-body="#3A4152" data-cab="#2b3140" data-sign="SORRY · CLOSED" data-signcolor="#9BA6BB" data-stay-closed="true"></div>
+          <div class="sad-cloud reveal">“But their post said <em>open</em>…”</div>
         </div>
         <div class="stop-copy">
-          <p class="stop-tag reveal">Stop 02 / 07 · The Closed Window</p>
-          <h2 class="reveal">You drove 20 minutes.<br/><span class="muted-hl">The window was shut.</span></h2>
-          <p class="reveal">The truck posted three days ago. The location was “downtown-ish.” The hours were a guess. So you hunted across Instagram, Facebook, and a search app that still says <em>open</em> — and ended up eating somewhere you didn't even want.</p>
-          <div class="problem-trio reveal">
-            <div><b>The hassle</b><span>Truck info is scattered across feeds, stories and outdated listings.</span></div>
-            <div><b>The feeling</b><span>You're hungry, unsure, and tired of gambling your lunch break.</span></div>
-            <div><b>The point</b><span>Great local food shouldn't be a scavenger hunt.</span></div>
-          </div>
-
-          <div class="compare reveal" id="compare">
+          <p class="stop-tag reveal"></p>
+          <h2 class="reveal">You drove 20 minutes. <span class="muted-hl">It was closed.</span></h2>
+          <p class="one-line reveal">Flip the switch to see the difference.</p>
+          <div class="compare reveal">
             <div class="compare-toggle" role="tablist" aria-label="Compare">
               <button role="tab" aria-selected="true" data-mode="old" class="active">😩 The old way</button>
-              <button role="tab" aria-selected="false" data-mode="new">😋 The Trovo way</button>
+              <button role="tab" aria-selected="false" data-mode="new">😋 With Trovo</button>
               <span class="toggle-pill"></span>
             </div>
             <div class="compare-panels">
-              <div class="panel panel-old active" data-panel="old">
-                <div class="feed-post"><span class="fp-src">IG story · expired</span><p>“Might be by the base tmrw 👀”</p><span class="fp-age">3 days ago</span></div>
-                <div class="feed-post"><span class="fp-src">Facebook post</span><p>“Usual spot! (you know where)”</p><span class="fp-age">last week</span></div>
-                <div class="feed-post"><span class="fp-src">Search listing</span><p>“Open · 11 AM–2 PM”</p><span class="fp-age">hours from 2023</span></div>
-                <div class="panel-verdict bad">4 apps checked · 0 answers · still hungry</div>
+              <div class="panel active" data-panel="old">
+                <div class="feed-post"><span class="fp-src">Instagram story</span><p>“Might be by the base tmrw 👀”</p><span class="fp-age">3 days old</span></div>
+                <div class="feed-post"><span class="fp-src">Facebook post</span><p>“Usual spot!”</p><span class="fp-age">last week</span></div>
+                <div class="feed-post"><span class="fp-src">Search listing</span><p>“Open 11 AM–2 PM”</p><span class="fp-age">out of date</span></div>
+                <div class="panel-verdict bad">3 apps. No answer. Still hungry.</div>
               </div>
-              <div class="panel panel-new" data-panel="new">
+              <div class="panel" data-panel="new">
                 <div class="live-row"><span class="live">● LIVE</span><b>Golden Hour Biscuits</b><span>0.4 mi</span></div>
                 <div class="live-row"><span class="live">● LIVE</span><b>La Ruta Tacos</b><span>0.9 mi</span></div>
                 <div class="live-row"><span class="live">● LIVE</span><b>Smoke Signal BBQ</b><span>1.3 mi</span></div>
-                <div class="panel-verdict good">1 app · checked in by the trucks · lunch in 12 min</div>
+                <div class="panel-verdict good">1 app. Checked in by the trucks.</div>
               </div>
             </div>
           </div>
-          <p class="stakes reveal">Every stale post costs a customer a wasted trip, and costs a truck a sale it never knew it lost.</p>
         </div>
       </div>
     </section>
 
-    <!-- =========================================================
-         STOP 3 · MEET YOUR GUIDE (Trovo)
-         StoryBrand: Guide = empathy + authority.
-         Cialdini: Authority (vendor-confirmed, auto-expiring),
-         Liking (local, warm, we've been there).
-         ========================================================= -->
-    <section class="stop" id="stop-3" data-stop="3">
+    <!-- ===================== FOODIE · guide + plan + demo ===================== -->
+    <section class="stop" id="try" data-for="foodie" data-label="Try It">
       <div class="stop-head center">
-        <p class="stop-tag reveal">Stop 03 / 07 · Meet Trovo</p>
-        <h2 class="reveal">We've stood at that closed window too.<br/>So we built a map that <span class="hl">only shows who's actually serving.</span></h2>
-        <p class="reveal narrow">On Trovo, the truck checks itself in when it opens. When the shift ends, the listing goes away on its own. No guessing, no old posts, no “open” signs that aren't true.</p>
+        <p class="stop-tag reveal"></p>
+        <h2 class="reveal">See who's serving. <span class="hl">Tap. Go.</span></h2>
+        <ol class="steps-row reveal" aria-label="How it works">
+          <li><span>1</span> Open Trovo</li>
+          <li><span>2</span> Pick a truck</li>
+          <li><span>3</span> Tap directions</li>
+        </ol>
       </div>
 
-      <div class="authority reveal">
-        <div class="auth-card"><span class="auth-ic">📍</span><b>Checked in by the truck</b><span>Owners go live from their exact spot with a precise, draggable map pin.</span></div>
-        <div class="auth-card"><span class="auth-ic">⏳</span><b>Listings expire on their own</b><span>Sessions end automatically, so “open now” is never left over from yesterday.</span></div>
-        <div class="auth-card"><span class="auth-ic">🧭</span><b>One-tap directions</b><span>Hand off straight to Apple Maps or Google Maps.</span></div>
-        <div class="auth-card"><span class="auth-ic">🔔</span><b>Favorite alerts</b><span>Get pinged the moment your go-to truck goes live.</span></div>
-      </div>
-
-      <!-- Interactive live map demo -->
       <div class="demo reveal" id="demo">
         <div class="demo-head">
           <div>
-            <h3>Try it: who's live right now?</h3>
-            <p class="demo-note">Interactive demo · sample trucks</p>
+            <h3>What are you craving?</h3>
+            <p class="demo-note">Try it · sample trucks</p>
           </div>
           <div class="demo-controls">
             <div class="chips" id="chips" role="group" aria-label="Filter by food"></div>
@@ -221,62 +200,57 @@
           <aside class="demo-detail" id="demoDetail" aria-live="polite"></aside>
         </div>
       </div>
+      <p class="trigger-line reveal center">🕚 When the clock hits <b>11:45</b>, open Trovo.</p>
     </section>
 
-    <!-- =========================================================
-         STOP 4 · THE PLAN
-         StoryBrand: simple 3-step plan.
-         Cialdini: Commitment & consistency (small yes → favorite).
-         Contagious: Practical value + Triggers.
-         ========================================================= -->
-    <section class="stop" id="stop-4" data-stop="4">
-      <div class="stop-grid reverse">
-        <div class="stop-copy">
-          <p class="stop-tag reveal">Stop 04 / 07 · The Plan</p>
-          <h2 class="reveal">Lunch, found in <span class="hl">three taps.</span></h2>
-          <ol class="plan">
-            <li class="reveal"><span class="plan-n">1</span><div><b>Open Trovo</b><p>See every truck serving near you, sorted by distance, on a map or a list.</p></div></li>
-            <li class="reveal"><span class="plan-n">2</span><div><b>Peek at the menu</b><p>Photos, prices and reviews, so you know what you're walking up to.</p></div></li>
-            <li class="reveal"><span class="plan-n">3</span><div><b>Tap directions &amp; eat</b><p>One tap hands you off to Apple Maps or Google Maps. That's it.</p></div></li>
-          </ol>
-
-          <div class="crave reveal" id="crave">
-            <p class="crave-q">Quick one: what are you craving?</p>
-            <div class="crave-opts">
-              <button data-crave="Southern">🍳 Biscuits</button>
-              <button data-crave="Tacos">🌮 Tacos</button>
-              <button data-crave="BBQ">🍖 BBQ</button>
-              <button data-crave="Wings">🍗 Wings</button>
-              <button data-crave="Sweets">🍑 Sweets</button>
-            </div>
-            <div class="crave-result" id="craveResult" hidden></div>
-          </div>
-          <p class="trigger-line reveal">🕚 New habit: when the clock hits <b>11:45</b>, open Trovo.</p>
-        </div>
+    <!-- ===================== TRUCK · the problem ===================== -->
+    <section class="stop" id="posting" data-for="truck" data-label="The Posting Grind">
+      <div class="stop-grid">
         <div class="truck-stage">
-          <div class="truck" data-truck data-body="#E6592A" data-cab="#C34A20" data-sign="GOLDEN HOUR" data-signcolor="#FBBF24" data-menu="Biscuits & Gravy|Chicken Biscuit|Shrimp & Grits"></div>
-          <div class="steam" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="truck" data-truck data-body="#3A4152" data-cab="#2b3140" data-sign="HELLO? ANYONE?" data-signcolor="#9BA6BB"></div>
+          <div class="sad-cloud reveal">“I posted… did anyone see it?”</div>
+        </div>
+        <div class="stop-copy">
+          <p class="stop-tag reveal"></p>
+          <h2 class="reveal">You posted your spot. <span class="muted-hl">Nobody saw it.</span></h2>
+          <p class="one-line reveal">Flip the switch to see the difference.</p>
+          <div class="compare reveal">
+            <div class="compare-toggle" role="tablist" aria-label="Compare">
+              <button role="tab" aria-selected="true" data-mode="old" class="active">😩 The old way</button>
+              <button role="tab" aria-selected="false" data-mode="new">😎 With Trovo</button>
+              <span class="toggle-pill"></span>
+            </div>
+            <div class="compare-panels">
+              <div class="panel active" data-panel="old">
+                <div class="feed-post"><span class="fp-src">Step 1</span><p>Post to Instagram</p><span class="fp-age">5 min</span></div>
+                <div class="feed-post"><span class="fp-src">Step 2</span><p>Post to Facebook</p><span class="fp-age">5 min</span></div>
+                <div class="feed-post"><span class="fp-src">Step 3</span><p>Fix your Google hours</p><span class="fp-age">5 min</span></div>
+                <div class="panel-verdict bad">15 minutes. Grill's still cold.</div>
+              </div>
+              <div class="panel" data-panel="new">
+                <div class="live-row"><span class="live">● LIVE</span><b>You're on the map</b><span>✓</span></div>
+                <div class="live-row"><span class="live">● SENT</span><b>Your fans got a ping</b><span>✓</span></div>
+                <div class="live-row"><span class="live">● READY</span><b>Story card to share</b><span>✓</span></div>
+                <div class="panel-verdict good">1 tap. Back to cooking.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- =========================================================
-         STOP 5 · FOR TRUCK OWNERS (second hero: vendor)
-         StoryBrand: vendor as the hero, Trovo as the guide.
-         Contagious: Public + Social currency (story cards).
-         Cialdini: Reciprocity (free listing & tools).
-         ========================================================= -->
-    <section class="stop vendor" id="stop-5" data-stop="5">
+    <!-- ===================== TRUCK · go live demo ===================== -->
+    <section class="stop vendor" id="golive-stop" data-for="truck" data-label="Go Live">
       <div class="stop-head center">
-        <p class="stop-tag reveal">Stop 05 / 07 · For Truck Owners</p>
-        <h2 class="reveal">Your best day starts with <span class="hl">one tap.</span></h2>
-        <p class="reveal narrow">You've got a grill to run. You shouldn't have to post to five places to tell people where you are. Tap <b>Go Live</b> and Trovo puts your truck on the map, alerts the people who favorited you, and gives you a story card to share.</p>
+        <p class="stop-tag reveal"></p>
+        <h2 class="reveal">Go live in <span class="hl">one tap.</span></h2>
+        <p class="one-line reveal">Type your truck's name. Press the button.</p>
       </div>
 
       <div class="golive reveal" id="golive">
         <div class="gl-controls">
           <label for="truckName">Your truck's name</label>
-          <input id="truckName" type="text" maxlength="28" placeholder="e.g. Smoke Signal BBQ" value="" />
+          <input id="truckName" type="text" maxlength="28" placeholder="e.g. Smoke Signal BBQ" />
           <label for="truckSpot">Where are you parked?</label>
           <select id="truckSpot">
             <option>Downtown Macon</option>
@@ -287,7 +261,7 @@
           <button class="golive-btn magnetic" id="goLiveBtn" aria-pressed="false">
             <span class="gl-dot"></span><span class="gl-label">Go Live</span>
           </button>
-          <p class="gl-hint" id="glHint">Tap it. This is what your shift looks like on Trovo.</p>
+          <p class="gl-hint" id="glHint">Press it to start a pretend shift.</p>
         </div>
 
         <div class="gl-preview">
@@ -296,120 +270,90 @@
             <div class="sc-truck" aria-hidden="true">🚚</div>
             <div class="sc-name" id="scName">Your Truck</div>
             <div class="sc-where" id="scWhere">Downtown Macon</div>
-            <div class="sc-until" id="scUntil">Tap Go Live to start your shift</div>
+            <div class="sc-until" id="scUntil">Press Go Live</div>
             <div class="sc-cta">Find us live on Trovo</div>
           </div>
           <div class="gl-side">
-            <div class="gl-stat"><span>Followers alerted</span><b id="statAlert">—</b></div>
+            <div class="gl-stat"><span>Fans pinged</span><b id="statAlert">—</b></div>
             <div class="gl-stat"><span>Profile views</span><b id="statViews">—</b></div>
             <div class="gl-stat"><span>Direction taps</span><b id="statTaps">—</b></div>
-            <p class="demo-note">Example numbers for illustration</p>
+            <p class="demo-note">Example numbers</p>
             <button class="btn btn-ghost btn-sm" id="copyStory" disabled>Copy share caption</button>
           </div>
         </div>
       </div>
 
-      <div class="feature-wall">
-        <div class="fw reveal"><b>One-tap GPS check-in</b><span>Go live from where you're parked.</span></div>
-        <div class="fw reveal"><b>Precise, draggable pin</b><span>Show the exact spot, down to the parking lot.</span></div>
-        <div class="fw reveal"><b>Auto-ending shifts</b><span>Forget to end it? Your session expires on its own.</span></div>
-        <div class="fw reveal"><b>Venue snapping</b><span>Snap to known hubs and event spots.</span></div>
-        <div class="fw reveal"><b>9:16 story cards</b><span>A branded card ready for Instagram &amp; Facebook.</span></div>
-        <div class="fw reveal"><b>Your logo &amp; photos</b><span>Upload your brand and truck photos.</span></div>
-        <div class="fw reveal"><b>Square menu import</b><span>Bring your Square catalog over to start.</span></div>
-        <div class="fw reveal"><b>Direction-tap alerts</b><span>See when people are heading your way.</span></div>
-      </div>
+      <ul class="icon-row reveal" aria-label="What you get">
+        <li><span>📍</span>Exact map pin</li>
+        <li><span>⏳</span>Shifts end on their own</li>
+        <li><span>📲</span>Story cards</li>
+        <li><span>🔔</span>Fans get pinged</li>
+        <li><span>🧾</span>Square menu import</li>
+        <li><span>📈</span>See who's heading over</li>
+      </ul>
     </section>
 
-    <!-- =========================================================
-         STOP 6 · THE FOUNDERS' WINDOW (Pricing)
-         Cialdini: Reciprocity (free first), Scarcity (founding
-         cohort rate), Commitment (low-friction start).
-         Contagious: Social currency (be a founding truck).
-         ========================================================= -->
-    <section class="stop" id="stop-6" data-stop="6">
+    <!-- ===================== TRUCK · pricing ===================== -->
+    <section class="stop" id="pricing" data-for="truck" data-label="Founders">
       <div class="stop-head center">
-        <p class="stop-tag reveal">Stop 06 / 07 · The Founders' Window</p>
+        <p class="stop-tag reveal"></p>
         <h2 class="reveal">Start free. <span class="hl">Lock in the founding rate.</span></h2>
-        <p class="reveal narrow">Foodies never pay. Trucks can list and go live for free. Trovo Pro is there when you want more, and our first Middle Georgia trucks get the founding price.</p>
       </div>
 
-      <div class="pricing">
+      <div class="pricing two">
         <div class="price-card reveal">
-          <p class="pc-kicker">For foodies</p>
+          <p class="pc-kicker">Basic</p>
           <h3>Free</h3>
-          <p class="pc-sub">Forever free to find food.</p>
-          <ul><li>Live map &amp; list of open trucks</li><li>Menus, photos &amp; reviews</li><li>One-tap directions</li><li>Favorite-truck alerts</li></ul>
-          <a href="#stop-7" class="btn btn-ghost magnetic" data-role="foodie">Get early access</a>
-        </div>
-        <div class="price-card reveal">
-          <p class="pc-kicker">For trucks · Basic</p>
-          <h3>Free</h3>
-          <p class="pc-sub">Everything you need to get found.</p>
-          <ul><li>Truck profile, logo &amp; menu</li><li>One-tap Go Live &amp; auto-expiry</li><li>Story cards to share</li><li>Basic views &amp; direction-tap stats</li></ul>
-          <a href="#stop-7" class="btn btn-ghost magnetic" data-role="truck">List my truck</a>
+          <ul><li>Profile, logo &amp; menu</li><li>One-tap Go Live</li><li>Story cards</li></ul>
+          <a href="#join" class="btn btn-ghost magnetic">List my truck free</a>
         </div>
         <div class="price-card featured reveal">
           <div class="ribbon">Founding rate</div>
-          <p class="pc-kicker">For trucks · Pro</p>
+          <p class="pc-kicker">Pro</p>
           <h3><span class="strike">$19.99</span> $14.99<small>/mo</small></h3>
-          <p class="pc-sub">Founding price for our first 100–200 trucks.</p>
-          <ul><li>Everything in Basic</li><li>Deeper customer-interest analytics</li><li>Extra promotion &amp; branding tools</li><li>First access to new features</li></ul>
-          <a href="#stop-7" class="btn btn-primary magnetic" data-role="truck">Claim a founding spot</a>
-          <div class="cohort">
-            <div class="cohort-bar"><span></span></div>
-            <p>Founding cohort is limited. Once it fills, Pro goes to the standard rate.</p>
-          </div>
+          <ul><li>Everything in Basic</li><li>Deeper analytics</li><li>Extra promo tools</li></ul>
+          <a href="#join" class="btn btn-primary magnetic">Claim a founding spot</a>
+          <p class="cohort-note">Only for our first 100–200 trucks.</p>
         </div>
       </div>
-
-      <div class="kitchen reveal">
-        <div class="kitchen-head"><span class="kh-ic">👨‍🍳</span><div><b>Still in the kitchen</b><p>Being built and tested now. We'll ship them when they're ready, not before.</p></div></div>
-        <div class="kitchen-items">
-          <div><b>Order ahead &amp; Apple Pay</b><span>Skip the line from your phone</span></div>
-          <div><b>Virtual queue</b><span>Get paged when your order's up</span></div>
-          <div><b>Rush gauge</b><span>See when a truck's about to get slammed</span></div>
-        </div>
-      </div>
+      <p class="soon-line reveal center"><b>Coming soon:</b> <span>Order ahead</span><span>Virtual line</span><span>Rush alerts</span></p>
     </section>
 
-    <!-- =========================================================
-         STOP 7 · DESSERT (Success + CTA)
-         StoryBrand: success picture + direct CTA.
-         Cialdini: Unity (Middle Georgia, "us"), Commitment.
-         Contagious: Social currency (Founding Foodie badge),
-         Public (shareable), Stories.
-         ========================================================= -->
-    <section class="stop finale" id="stop-7" data-stop="7">
+    <!-- ===================== BOTH · success + join ===================== -->
+    <section class="stop finale" id="join" data-label="Join">
       <div class="stop-grid">
         <div class="stop-copy">
-          <p class="stop-tag reveal">Stop 07 / 07 · Dessert</p>
-          <h2 class="reveal">Picture lunch where <span class="hl">the window's always open.</span></h2>
-          <ul class="success reveal">
-            <li><span>🍽️</span> You know who's serving before you grab your keys.</li>
-            <li><span>🚚</span> Trucks spend more time cooking and less time posting.</li>
-            <li><span>🍑</span> Middle Georgia's food scene gets the crowd it deserves.</li>
+          <p class="stop-tag reveal"></p>
+          <h2 class="reveal" data-for="foodie">Lunch, found. <span class="hl">Every time.</span></h2>
+          <h2 class="reveal" data-for="truck">More customers. <span class="hl">Less posting.</span></h2>
+          <ul class="success reveal" data-for="foodie">
+            <li><span>🍽️</span> Know who's open before you leave.</li>
+            <li><span>⏱️</span> No more wasted trips.</li>
+            <li><span>🍑</span> Support local trucks.</li>
           </ul>
-          <p class="unity reveal">Made in Warner Robins &amp; Macon, for the people who eat here. Atlanta is next.</p>
+          <ul class="success reveal" data-for="truck">
+            <li><span>📍</span> Get found in one tap.</li>
+            <li><span>🔔</span> Your fans know when you're open.</li>
+            <li><span>🍳</span> More time cooking.</li>
+          </ul>
+          <p class="unity reveal">Made in Warner Robins &amp; Macon. Atlanta is next.</p>
         </div>
 
         <div class="signup reveal">
           <form id="signupForm" novalidate>
-            <h3>Join the founding crew</h3>
-            <p class="su-sub">Be first in when Trovo launches in your area.</p>
-            <div class="role-toggle" role="radiogroup" aria-label="I am a">
-              <button type="button" role="radio" aria-checked="true" class="active" data-role="foodie">🍽️ I'm hungry</button>
-              <button type="button" role="radio" aria-checked="false" data-role="truck">🚚 I own a truck</button>
-            </div>
-            <label for="suName" class="sr">Name</label>
-            <input id="suName" type="text" placeholder="First name" autocomplete="given-name" />
-            <label for="suEmail" class="sr">Email</label>
-            <input id="suEmail" type="email" placeholder="Email address" autocomplete="email" required />
-            <label for="suCity" class="sr">City</label>
-            <select id="suCity"><option>Warner Robins</option><option>Macon</option><option>Perry</option><option>Atlanta (next!)</option><option>Somewhere else</option></select>
-            <button type="submit" class="btn btn-primary btn-block magnetic" id="suBtn">Get early access</button>
+            <h3 data-for="foodie">Get early access</h3>
+            <h3 data-for="truck">Claim a founding spot</h3>
+            <p class="su-sub" data-for="foodie">Free for foodies. We'll tell you when Trovo's live near you.</p>
+            <p class="su-sub" data-for="truck">Free to list. Founding Pro rate while spots last.</p>
+            <label for="suName">First name</label>
+            <input id="suName" type="text" autocomplete="given-name" />
+            <label for="suEmail">Email</label>
+            <input id="suEmail" type="email" autocomplete="email" required />
+            <label for="suCity">City</label>
+            <select id="suCity"><option>Warner Robins</option><option>Macon</option><option>Perry</option><option>Atlanta</option><option>Somewhere else</option></select>
+            <button type="submit" class="btn btn-primary btn-block btn-lg magnetic" id="suBtn">Sign me up</button>
             <p class="su-err" id="suErr" role="alert"></p>
-            <p class="fine">No spam. Just a heads-up when Trovo's live near you.</p>
+            <p class="fine">No spam. You must be 13 or older to sign up. Under 13? Ask a parent to sign up for you.</p>
           </form>
 
           <div class="badge-wrap" id="badgeWrap" hidden>
@@ -420,10 +364,10 @@
               <span class="badge-name" id="badgeName">—</span>
               <span class="badge-city" id="badgeCity">Middle Georgia</span>
             </div>
-            <p class="badge-msg" id="badgeMsg">You're in. Know someone who'd love this? Send it their way.</p>
+            <p class="badge-msg" id="badgeMsg">You're in!</p>
             <div class="share-row">
-              <button class="btn btn-primary btn-sm" id="shareBtn">Copy invite link</button>
-              <button class="btn btn-ghost btn-sm" id="resetBtn">Done</button>
+              <button class="btn btn-primary" id="shareBtn">Send to my lunch group</button>
+              <button class="btn btn-ghost" id="resetBtn">Done</button>
             </div>
           </div>
         </div>
@@ -433,7 +377,7 @@
 
   <footer class="footer">
     <div class="foot-inner">
-      <a href="#stop-1" class="logo">Trov<span class="logo-o">o</span></a>
+      <a href="#start" class="logo">Trov<span class="logo-o">o</span></a>
       <p>Find food trucks that are actually open.</p>
       <p class="foot-small">© <span id="year"></span> Trovo · Warner Robins &amp; Macon, Georgia</p>
     </div>

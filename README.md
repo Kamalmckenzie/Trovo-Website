@@ -4,17 +4,27 @@ Marketing site for **Trovo**: find food trucks that are actually open. Each sect
 
 Plain HTML, CSS and JavaScript, with no build step. Open `index.html` or deploy the folder to GitHub Pages, Netlify or Vercel.
 
-## The stops
+## How the page works
 
-| # | Stop | StoryBrand (Miller) | Contagious (Berger) | Influence (Cialdini) |
-|---|------|--------------------|---------------------|----------------------|
-| 1 | The Lot (hero) | Character + what they want, in one line | **Trigger**: live clock, "who's serving right now?" | Liking (local, friendly) |
-| 2 | The Closed Window | Villain (stale info); external, internal and philosophical problem; stakes | **Emotion**: that "it's closed" sinking feeling | Contrast (old way vs Trovo way) |
-| 3 | Meet Trovo | Guide = empathy + authority | **Practical value**: live map demo | **Authority**: vendor-confirmed and auto-expiring listings |
-| 4 | The Plan | Simple 3-step plan | **Triggers**: "when the clock hits 11:45" | **Commitment**: craving picker, then favorite |
-| 5 | For Truck Owners | Vendor as hero, plus a second CTA | **Public + social currency**: shareable story cards | **Reciprocity**: free listing and tools |
-| 6 | Founders' Window | Transitional and direct CTAs | **Social currency**: be a founding truck | **Scarcity**: founding cohort rate; **Reciprocity**: free first |
-| 7 | Dessert | Success picture + direct CTA | **Social currency**: Founding Foodie or Founding Truck badge; **Public**: invite link | **Unity**: "Made in Middle Georgia"; Commitment |
+A switch at the top ("I'm hungry / I own a truck") swaps the whole page to that visitor's story, so nobody reads the half that isn't for them. Each stop is one headline, one line of text and one thing to try.
+
+**Foodie crawl (4 stops):** The Lot → Closed Window (old way vs Trovo switch) → Try It (live map demo, craving filters, save a truck) → Join
+**Truck crawl (5 stops):** The Lot → The Posting Grind (old way vs Trovo switch) → Go Live (simulator + story card) → Founders (pricing) → Join
+
+| Book | Where it shows up |
+|------|-------------------|
+| StoryBrand (Miller) | 5-second hero (what / why / one button), problem → guide → 3-step plan → call to action → success; Join button always visible in the route bar |
+| Contagious (Berger) | Time-of-day trigger in the hero, "11:45 → open Trovo", shareable story cards, Founding badge, "Send to my lunch group" |
+| Influence (Cialdini) | Reciprocity (free for foodies, free truck listing), commitment (save a truck), scarcity (founding cohort), authority (truck-confirmed check-ins), unity (Middle Georgia) |
+
+**Social proof is intentionally missing.** Add real truck counts, quotes and event photos once you have them. Don't invent them.
+
+## Built for every generation
+
+- **Boomers / Gen X:** "Bigger text" button, "Pause motion" button, visible form labels, high-contrast text, 44px+ tap targets, plain wording.
+- **Millennials / Gen Z:** one-tap sharing, story cards, quick scannable copy, emoji, mobile-first layout.
+- **Gen Alpha:** game-like crawl and interactive demos; the sign-up asks under-13s to have a parent sign up.
+- Visitors with Reduce Motion on in their device settings start with motion paused (they can press Play).
 
 ## Before launch
 
