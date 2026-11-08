@@ -181,7 +181,7 @@ new IntersectionObserver((en, obs) => {
 
 /* ---------- Stop 3: live map demo (sample data) ---------- */
 const TRUCKS = [
-  { id: "kamal", name: "Kamal's Biscuits And Gravy", cat: "Southern", emoji: "🍳", x: 30, y: 32, dist: "0.4 mi", rating: "5.0", wait: "10–15 min", live: true, until: "2:00 PM", color: "#6b3a1c",
+  { id: "golden", name: "Golden Hour Biscuits", cat: "Southern", emoji: "🍳", x: 30, y: 32, dist: "0.4 mi", rating: "5.0", wait: "10–15 min", live: true, until: "2:00 PM", color: "#6b3a1c",
     menu: [["Biscuits & Gravy", "$9"], ["Chicken Biscuit", "$8"], ["Shrimp & Grits", "$13"]] },
   { id: "ruta", name: "La Ruta Tacos", cat: "Tacos", emoji: "🌮", x: 62, y: 28, dist: "0.9 mi", rating: "4.8", wait: "5–10 min", live: true, until: "3:30 PM", color: "#7a4a12",
     menu: [["Birria Tacos (3)", "$12"], ["Al Pastor", "$4"], ["Elote", "$5"]] },
@@ -195,7 +195,7 @@ const TRUCKS = [
     menu: [["Classic Lemonade", "$5"], ["Strawberry Lemonade", "$6"], ["Funnel Fries", "$7"]] }
 ];
 const CATS = ["All", "Southern", "Tacos", "BBQ", "Wings", "Sweets"];
-let currentCat = "All", selectedId = "kamal";
+let currentCat = "All", selectedId = "golden";
 const favorites = new Set();
 
 const chipsEl = $("#chips"), mapEl = $("#demoMap"), listEl = $("#demoList"), detailEl = $("#demoDetail");
