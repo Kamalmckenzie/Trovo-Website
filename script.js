@@ -551,8 +551,9 @@ function motionFrame() {
     const p = (vh - r.top) / (vh + r.height);
     track.style.transform = motionOn ? `translateX(${dir * (p * 40 + (dir > 0 ? -45 : 5))}%)` : "translateX(-5%)";
   });
+  const narrow = innerWidth <= 900;
   parallax.forEach(({ el, speed }) => {
-    if (!motionOn) { el.style.translate = ""; return; }
+    if (!motionOn || (narrow && (el.matches(".truck, .sad-cloud")))) { el.style.translate = ""; return; }
     const r = el.getBoundingClientRect();
     if (r.bottom < -200 || r.top > vh + 200) return;
     el.style.translate = `0 ${((r.top + r.height / 2 - vh / 2) * speed).toFixed(1)}px`;
