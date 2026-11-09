@@ -15,7 +15,6 @@ const store = {
   get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
 };
-const prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const canHover = matchMedia("(hover: hover)").matches;
 const siteUrl = () => CONFIG.SITE_URL || location.href.split("#")[0];
 
@@ -44,18 +43,13 @@ $("#year").textContent = new Date().getFullYear();
 /* =========================================================
    ACCESSIBILITY TOOLS (Gen X / Boomers): bigger text + pause motion
    ========================================================= */
-let motionOn = store.get("trovo-motion") ? store.get("trovo-motion") === "on" : !prefersReduced;
+// Motion always plays (no pause option, ignores the OS Reduce Motion setting by request).
+const motionOn = true;
 function applyMotion() {
-  document.body.classList.toggle("still", !motionOn);
-  const b = $("#motionBtn");
-  b.setAttribute("aria-pressed", String(!motionOn));
-  $(".motion-ic", b).textContent = motionOn ? "❚❚" : "▶";
-  $(".tool-label", b).textContent = motionOn ? "Pause motion" : "Play motion";
-  b.title = motionOn ? "Pause animations" : "Play animations";
+  document.body.classList.remove("still");
   const road = $(".hero-road");
-  if (road && road.pauseAnimations) motionOn ? road.unpauseAnimations() : road.pauseAnimations();
+  if (road && road.unpauseAnimations) road.unpauseAnimations();
 }
-$("#motionBtn").addEventListener("click", () => { motionOn = !motionOn; store.set("trovo-motion", motionOn ? "on" : "off"); applyMotion(); });
 
 let bigText = store.get("trovo-bigtext") === "on";
 function applyText() {

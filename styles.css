@@ -485,12 +485,6 @@ input:focus, select:focus { border-color: var(--orange); }
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-/* Reduced motion: keep gentle ambient loops, drop big movement (parallax, drive-ins, word rises) */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .reveal { transition-duration: .4s; transform: none; }
-  .truck .body-group { transform: none; }
-  .w > span { transform: none !important; }
 }
 
 /* =========================================================
