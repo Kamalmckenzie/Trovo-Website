@@ -6,7 +6,7 @@ const CONFIG = {
   // While empty, the form shows the success state but does NOT save anything.
   WAITLIST_ENDPOINT: "",
   // Public URL used by the share buttons. Falls back to the current page.
-  SITE_URL: "https://kamalmckenzie.github.io/Trovo-Website/"
+  SITE_URL: "https://trovo.city/"
 };
 
 const $ = (s, el = document) => el.querySelector(s);
