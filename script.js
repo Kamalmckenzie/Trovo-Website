@@ -75,7 +75,7 @@ function tickClock() {
   } else {
     msg = h >= 5 && h < 10.5 ? `☀️ It's ${t}. Breakfast truck, anyone?`
         : h < 14.5 && h >= 10.5 ? `🌮 It's ${t}. Lunch is minutes away.`
-        : h < 17 && h >= 14.5 ? `🍑 It's ${t}. Snack run?`
+        : h < 17 && h >= 14.5 ? `🧁 It's ${t}. Snack run?`
         : h < 22 && h >= 17 ? `🌙 It's ${t}. Dinner's on wheels tonight.`
         : `🌙 It's ${t}. See who's out tomorrow.`;
   }
@@ -310,14 +310,14 @@ const TRUCKS = [
     menu: [["Birria Tacos (3)", "$12"], ["Al Pastor", "$4"], ["Elote", "$5"]] },
   { id: "smoke", name: "Smoke Signal BBQ", cat: "BBQ", emoji: "🍖", x: 74, y: 66, dist: "1.3 mi", rating: "4.9", wait: "15–20 min", live: true, until: "4:00 PM", color: "#5a1f12",
     menu: [["Brisket Plate", "$16"], ["Pulled Pork Sandwich", "$11"], ["Mac & Cheese", "$5"]] },
-  { id: "pops", name: "Peach State Pops", cat: "Sweets", emoji: "🍑", x: 18, y: 70, dist: "1.8 mi", rating: "4.7", wait: "< 5 min", live: true, until: "6:00 PM", color: "#7a3b2a",
-    menu: [["Peach Cobbler Pop", "$5"], ["Banana Pudding Cup", "$6"], ["Sweet Tea", "$3"]] },
+  { id: "pops", name: "Sweet Spot Treats", cat: "Sweets", emoji: "🧁", x: 18, y: 70, dist: "1.8 mi", rating: "4.7", wait: "< 5 min", live: true, until: "6:00 PM", color: "#7a3b2a",
+    menu: [["Banana Pudding Cup", "$6"], ["Cookie Sandwich", "$5"], ["Sweet Tea", "$3"]] },
   { id: "wing", name: "Wing Theory", cat: "Wings", emoji: "🍗", x: 86, y: 22, dist: "2.1 mi", rating: "4.6", wait: "10 min", live: true, until: "8:00 PM", color: "#6a4510",
     menu: [["Lemon Pepper (8)", "$12"], ["Hot Honey (8)", "$12"], ["Fries", "$4"]] },
   { id: "lemon", name: "Lemon Drop Lemonade", cat: "Sweets", emoji: "🍋", x: 48, y: 80, dist: "2.6 mi", rating: "4.8", wait: "—", live: false, until: "Back Sat 11 AM", color: "#5c5512",
     menu: [["Classic Lemonade", "$5"], ["Strawberry Lemonade", "$6"], ["Funnel Fries", "$7"]] }
 ];
-const CATS = [["All", "✨"], ["Southern", "🍳"], ["Tacos", "🌮"], ["BBQ", "🍖"], ["Wings", "🍗"], ["Sweets", "🍑"]];
+const CATS = [["All", "✨"], ["Southern", "🍳"], ["Tacos", "🌮"], ["BBQ", "🍖"], ["Wings", "🍗"], ["Sweets", "🧁"]];
 let currentCat = "All", selectedId = "golden";
 const favorites = new Set();
 const chipsEl = $("#chips"), mapEl = $("#demoMap"), listEl = $("#demoList"), detailEl = $("#demoDetail");
@@ -489,7 +489,7 @@ $("#resetBtn").addEventListener("click", () => { form.reset(); form.hidden = fal
 
 (function foodFloat() {
   const box = $("#foodFloat"); if (!box) return;
-  const foods = ["🌮", "🍔", "🍗", "🍖", "🍑", "🍋", "🥤", "🍳", "🌯", "🍟", "🧁", "🥪"];
+  const foods = ["🌮", "🍔", "🍗", "🍖", "🍋", "🥤", "🍳", "🌯", "🍟", "🧁", "🥪"];
   const spawn = () => {
     if (!motionOn || document.hidden || box.childElementCount > 14 || scrollY > innerHeight) return;
     const s = document.createElement("span");
