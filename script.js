@@ -451,6 +451,14 @@ form.addEventListener("submit", async e => {
       if (!res.ok) throw new Error(res.status);
     } catch (_) { err.textContent = "Something went wrong. Please try again."; return; }
   }
+  // Customer.io: create/update the person and record the sign-up (triggers welcome automations)
+  const cio = window.cioanalytics;
+  if (cio && cio.identify) {
+    const traits = { email, first_name: name || undefined, city, role: audience, waitlist: true, signup_source: "trovo.city", waitlist_signed_up_at: Math.floor(Date.now() / 1000) };
+    cio.identify(email.toLowerCase(), traits);
+    cio.track("Waitlist Signup", { role: audience, city });
+  }
+
   $("#badgeTitle").textContent = audience === "truck" ? "Founding Truck" : "Founding Foodie";
   $("#badgeName").textContent = name || (audience === "truck" ? "Truck crew" : "Hungry local");
   $("#badgeCity").textContent = city;
@@ -464,6 +472,7 @@ $("#shareBtn").addEventListener("click", async () => {
     ? `Check out Trovo: one tap puts your food truck on the map for hungry people nearby 🚚 ${siteUrl()}`
     : `Found an app that shows which food trucks are actually open right now 🌮 Lunch this week? ${siteUrl()}`;
   const ok = await copyText(text);
+  if (ok && window.cioanalytics) window.cioanalytics.track("Invite Copied", { role: audience });
   toast(ok ? "📋 Message copied. Paste it in your group chat." : "Couldn't copy here. Grab the link from your address bar.");
 });
 $("#resetBtn").addEventListener("click", () => { form.reset(); form.hidden = false; badgeWrap.hidden = true; });
